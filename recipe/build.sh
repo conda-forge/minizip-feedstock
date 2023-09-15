@@ -10,7 +10,6 @@ cmake -S . -B build \
   -DMZ_LIBCOMP=OFF \
   -DMZ_OPENSSL=ON \
   -DMZ_ZLIB=ON \
-  -DCMAKE_INSTALL_INCLUDEDIR=include/minizip \
   -DMZ_FORCE_FETCH_LIBS=OFF
 
 cmake --build build
