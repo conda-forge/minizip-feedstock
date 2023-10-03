@@ -1,20 +1,15 @@
+#!/bin/bash
+set -ex
 
+mkdir build
+cd build
 
-cmake ${CMAKE_ARGS} -S . -B build \
+cmake ${CMAKE_ARGS} \
   -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
   -DBUILD_SHARED_LIBS=ON \
   -DCMAKE_BUILD_TYPE=Release \
-  -DUSE_AES=OFF
+  -DUSE_AES=OFF \
+  ..
 
-cmake --build build
-cmake --install build
-
-
-cmake ${CMAKE_ARGS} -S . -B sbuild \
-  -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
-  -DBUILD_SHARED_LIBS=OFF \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DUSE_AES=OFF
-
-cmake --build sbuild
-cmake --install sbuild
+cmake --build .
+cmake --install .
