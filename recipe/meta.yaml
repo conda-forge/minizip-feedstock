@@ -1,8 +1,7 @@
-{% set name = "minizip" %}
 {% set version = "1.2" %}
 
 package:
-  name: {{ name|lower }}
+  name: minizip-split
   version: {{ version }}
 
 source:
@@ -11,24 +10,29 @@ source:
 
 build:
   number: 0
-  run_exports:
-    - {{ pin_subpackage('minizip', max_pin='x') }}
 
-requirements:
-  build:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}  # [not win]
-    - cmake
-    - make  # [not win]
-    - ninja  # [win]
-    - pkg-config
-  host:
-    - zlib
+outputs:
+  - name: minizip
+    script: build-lib.sh   # [unix]
+    script: build-lib.bat  # [win]
+    build:
+      run_exports:
+        - {{ pin_subpackage('minizip', max_pin='x') }}
+    requirements:
+      build:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}  # [not win]
+        - cmake
+        - make   # [unix]
+        - ninja  # [win]
+        - pkg-config
+      host:
+        - zlib
 
-test:
-  commands:
-    - test -f $PREFIX/lib/libminizip${SHLIB_EXT}  # [not win]
-    - if not exist %LIBRARY_LIB%\\minizip.lib exit 1  # [win]
+    test:
+      commands:
+        - test -f $PREFIX/lib/libminizip${SHLIB_EXT}        # [unix]
+        - if not exist %LIBRARY_LIB%\minizip.lib exit 1     # [win]
 
 about:
   home: https://github.com/zlib-ng/minizip-ng
@@ -44,3 +48,4 @@ about:
 extra:
   recipe-maintainers:
     - akrherz
+  feedstock-name: minizip
