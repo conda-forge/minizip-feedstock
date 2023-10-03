@@ -39,6 +39,30 @@ outputs:
         - test ! -f $PREFIX/lib/libminizip.a                # [unix]
         - if exist %LIBRARY_LIB%\minizip_static.lib exit 1  # [win]
 
+  - name: minizip-static
+    script: build-lib.sh   # [unix]
+    script: build-lib.bat  # [win]
+    build:
+      always_include_files:
+        # Must overwrite cmake metadata from minizip
+        - lib/cmake/minizip/          # [unix]
+        - Library/lib/cmake/minizip/  # [win]
+    requirements:
+      build:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+        - cmake
+        - make   # [unix]
+        - ninja  # [win]
+        - pkg-config
+      host:
+        - {{ pin_subpackage("minizip", exact=True) }}
+        - zlib
+    test:
+      commands:
+        - test -f $PREFIX/lib/libminizip.a                      # [unix]
+        - if not exist %LIBRARY_LIB%\minizip_static.lib exit 1  # [win]
+
 about:
   home: https://github.com/zlib-ng/minizip-ng
   # http://zlib.net/zlib_license.html
