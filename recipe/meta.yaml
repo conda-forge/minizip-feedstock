@@ -30,8 +30,14 @@ outputs:
         - zlib
     test:
       commands:
+        # presence of shared libraries
         - test -f $PREFIX/lib/libminizip${SHLIB_EXT}        # [unix]
+        - if not exist %LIBRARY_BIN%\minizip.dll exit 1     # [win]
         - if not exist %LIBRARY_LIB%\minizip.lib exit 1     # [win]
+
+        # absence of static libraries
+        - test ! -f $PREFIX/lib/libminizip.a                # [unix]
+        - if exist %LIBRARY_LIB%\minizip_static.lib exit 1  # [win]
 
 about:
   home: https://github.com/zlib-ng/minizip-ng

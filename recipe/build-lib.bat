@@ -8,6 +8,7 @@ set CC=cl
 cmake -G Ninja ^
   -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%" ^
   -DCMAKE_BUILD_TYPE=Release ^
+  -DCMAKE_STATIC_LIBRARY_SUFFIX="_static.lib" ^
   -DBUILD_SHARED_LIBS=ON ^
   -DUSE_AES=OFF ^
   ..
