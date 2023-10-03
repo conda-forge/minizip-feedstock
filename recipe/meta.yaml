@@ -1,16 +1,16 @@
 {% set name = "minizip" %}
-{% set version = "4.0.1" %}
+{% set version = "1.2" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://github.com/zlib-ng/minizip-ng/archive/{{ version }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 63e47a2b4dbac0da501f43f4da74f118dfb3ef0dee0ffbbe89428271002260f8
+  url: https://github.com/zlib-ng/minizip-ng/archive/refs/heads/{{ version }}.zip
+  sha256: 2efb96485712375b2fd0e94bd84cc9d3559dfd3a82c27ac66cf6b25b61278cbf
 
 build:
-  number: 4
+  number: 0
   run_exports:
     - {{ pin_subpackage('minizip', max_pin='x') }}
 
@@ -23,12 +23,7 @@ requirements:
     - ninja  # [win]
     - pkg-config
   host:
-    - bzip2
-    - libiconv  # [not win]
-    - openssl  # [not win]
-    - xz 
     - zlib
-    - zstd
 
 test:
   commands:
