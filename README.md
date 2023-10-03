@@ -87,6 +87,7 @@ Current release info
 | Name | Downloads | Version | Platforms |
 | --- | --- | --- | --- |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-minizip-green.svg)](https://anaconda.org/conda-forge/minizip) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/minizip.svg)](https://anaconda.org/conda-forge/minizip) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/minizip.svg)](https://anaconda.org/conda-forge/minizip) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/minizip.svg)](https://anaconda.org/conda-forge/minizip) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-minizip--static-green.svg)](https://anaconda.org/conda-forge/minizip-static) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/minizip-static.svg)](https://anaconda.org/conda-forge/minizip-static) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/minizip-static.svg)](https://anaconda.org/conda-forge/minizip-static) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/minizip-static.svg)](https://anaconda.org/conda-forge/minizip-static) |
 
 Installing minizip
 ==================
@@ -98,16 +99,16 @@ conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `minizip` can be installed with `conda`:
+Once the `conda-forge` channel has been enabled, `minizip, minizip-static` can be installed with `conda`:
 
 ```
-conda install minizip
+conda install minizip minizip-static
 ```
 
 or with `mamba`:
 
 ```
-mamba install minizip
+mamba install minizip minizip-static
 ```
 
 It is possible to list all of the versions of `minizip` available on your platform with `conda`:
