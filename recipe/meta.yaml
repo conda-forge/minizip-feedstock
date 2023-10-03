@@ -28,7 +28,7 @@ requirements:
 test:
   commands:
     - test -f $PREFIX/lib/libminizip${SHLIB_EXT}  # [not win]
-    - if not exist %LIBRARY_LIB%\\libminizip.lib exit 1  # [win]
+    - if not exist %LIBRARY_LIB%\\minizip.lib exit 1  # [win]
 
 about:
   home: https://github.com/zlib-ng/minizip-ng
