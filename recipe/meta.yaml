@@ -21,14 +21,13 @@ outputs:
     requirements:
       build:
         - {{ compiler('c') }}
-        - {{ compiler('cxx') }}  # [not win]
+        - {{ compiler('cxx') }}
         - cmake
         - make   # [unix]
         - ninja  # [win]
         - pkg-config
       host:
         - zlib
-
     test:
       commands:
         - test -f $PREFIX/lib/libminizip${SHLIB_EXT}        # [unix]
