@@ -63,6 +63,8 @@ outputs:
       host:
         - {{ pin_subpackage("minizip", exact=True) }}
         - zlib
+      run:
+        - {{ pin_subpackage("minizip", exact=True) }}
     test:
       commands:
         - test -f $PREFIX/lib/libminizip.a                      # [unix]
