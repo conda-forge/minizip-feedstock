@@ -1,0 +1,67 @@
+From 6862419419a244bb1bb7f4ed0f14844269e1e5f1 Mon Sep 17 00:00:00 2001
+From: "H. Vetinari" <h.vetinari@gmx.com>
+Date: Thu, 5 Oct 2023 08:54:41 +1100
+Subject: [PATCH 2/2] Revert "Use arc4random_buf. (Issue: #175)"
+
+This reverts commit dac37702b3fab4068ac9a7c4a992df7f0e4f14df.
+---
+ crypt.c | 27 ++++++++++++++++++++++-----
+ 1 file changed, 22 insertions(+), 5 deletions(-)
+
+diff --git a/crypt.c b/crypt.c
+index a074b8f..6c519d0 100644
+--- a/crypt.c
++++ b/crypt.c
+@@ -46,6 +46,10 @@
+ 
+ #define CRC32(c, b) ((*(pcrc_32_tab+(((uint32_t)(c) ^ (b)) & 0xff))) ^ ((c) >> 8))
+ 
++#ifndef ZCR_SEED2
++#  define ZCR_SEED2 3141592654UL     /* use PI as default pattern */
++#endif
++
+ /***************************************************************************/
+ 
+ uint8_t decrypt_byte(uint32_t *pkeys)
+@@ -87,10 +91,11 @@ void init_keys(const char *passwd, uint32_t *pkeys, const z_crc_t *pcrc_32_tab)
+ #ifndef NOCRYPT
+ int cryptrand(unsigned char *buf, unsigned int len)
+ {
++    static unsigned calls = 0;
++    int rlen = 0;
+ #ifdef _WIN32
+     HCRYPTPROV provider;
+     unsigned __int64 pentium_tsc[1];
+-    int rlen = 0;
+     int result = 0;
+ 
+ 
+@@ -108,12 +113,24 @@ int cryptrand(unsigned char *buf, unsigned int len)
+             QueryPerformanceCounter((LARGE_INTEGER *)pentium_tsc);
+         buf[rlen] = ((unsigned char*)pentium_tsc)[rlen % 8];
+     }
+-
+-    return rlen;
+ #else
+-    arc4random_buf(buf, len);
+-    return len;
++    int frand = open("/dev/urandom", O_RDONLY);
++    if (frand != -1)
++    {
++        rlen = (int)read(frand, buf, len);
++        close(frand);
++    }
+ #endif
++    if (rlen < (int)len)
++    {
++        /* Ensure different random header each time */
++        if (++calls == 1)
++            srand((unsigned)(time(NULL) ^ ZCR_SEED2));
++
++        while (rlen < (int)len)
++            buf[rlen++] = (rand() >> 7) & 0xff;
++    }
++    return rlen;
+ }
+ 
+ int crypthead(const char *passwd, uint8_t *buf, int buf_size, uint32_t *pkeys,
