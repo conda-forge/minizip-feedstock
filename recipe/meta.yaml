@@ -1,34 +1,74 @@
-{% set name = "minizip" %}
 {% set version = "1.2" %}
 
 package:
-  name: {{ name|lower }}
+  name: minizip-split
   version: {{ version }}
 
 source:
-  url: https://github.com/zlib-ng/minizip-ng/archive/refs/heads/{{ version }}.zip
-  sha256: 2efb96485712375b2fd0e94bd84cc9d3559dfd3a82c27ac66cf6b25b61278cbf
+  # upstream does not have tags before 2.0, just a branch
+  # https://github.com/zlib-ng/minizip-ng/tree/1.2;
+  # for reproducibility, we point to a specific commit
+  git_url: https://github.com/zlib-ng/minizip-ng.git
+  git_rev: 8658af7e0a73d6ac4d94e81dde0e9fa95b1aff47
+  patches:
+    - patches/0001-set-separate-suffix-for-static-builds-on-windows.patch
 
 build:
-  number: 0
-  run_exports:
-    - {{ pin_subpackage('minizip', max_pin='x') }}
+  number: 1
 
-requirements:
-  build:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}  # [not win]
-    - cmake
-    - make  # [not win]
-    - ninja  # [win]
-    - pkg-config
-  host:
-    - zlib
+outputs:
+  - name: minizip
+    script: build-lib.sh   # [unix]
+    script: build-lib.bat  # [win]
+    build:
+      run_exports:
+        - {{ pin_subpackage('minizip', max_pin='x') }}
+    requirements:
+      build:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+        - cmake
+        - make   # [unix]
+        - ninja  # [win]
+        - pkg-config
+      host:
+        - zlib
+    test:
+      commands:
+        # presence of shared libraries
+        - test -f $PREFIX/lib/libminizip${SHLIB_EXT}        # [unix]
+        - if not exist %LIBRARY_BIN%\minizip.dll exit 1     # [win]
+        - if not exist %LIBRARY_LIB%\minizip.lib exit 1     # [win]
 
-test:
-  commands:
-    - test -f $PREFIX/lib/libminizip${SHLIB_EXT}  # [not win]
-    - if not exist %LIBRARY_LIB%\\minizip.lib exit 1  # [win]
+        # absence of static libraries
+        - test ! -f $PREFIX/lib/libminizip.a                # [unix]
+        - if exist %LIBRARY_LIB%\minizip_static.lib exit 1  # [win]
+
+  - name: minizip-static
+    script: build-lib.sh   # [unix]
+    script: build-lib.bat  # [win]
+    build:
+      always_include_files:
+        # Must overwrite cmake metadata from minizip
+        - lib/cmake/minizip/          # [unix]
+        - Library/lib/cmake/minizip/  # [win]
+    requirements:
+      build:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+        - cmake
+        - make   # [unix]
+        - ninja  # [win]
+        - pkg-config
+      host:
+        - {{ pin_subpackage("minizip", exact=True) }}
+        - zlib
+      run:
+        - {{ pin_subpackage("minizip", exact=True) }}
+    test:
+      commands:
+        - test -f $PREFIX/lib/libminizip.a                      # [unix]
+        - if not exist %LIBRARY_LIB%\minizip_static.lib exit 1  # [win]
 
 about:
   home: https://github.com/zlib-ng/minizip-ng
@@ -44,3 +84,4 @@ about:
 extra:
   recipe-maintainers:
     - akrherz
+  feedstock-name: minizip
