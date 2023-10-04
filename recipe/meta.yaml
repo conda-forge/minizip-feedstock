@@ -37,6 +37,8 @@ test:
     - if not exist %LIBRARY_BIN%\libminizip.dll exit 1  # [win]
     - if not exist %LIBRARY_LIB%\libminizip.lib exit 1  # [win]
 
+    # absence of static libraries
+    - test ! -f $PREFIX/lib/libminizip.a                # [unix]
 
 about:
   home: https://github.com/zlib-ng/minizip-ng
