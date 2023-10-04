@@ -10,7 +10,7 @@ source:
   sha256: 63e47a2b4dbac0da501f43f4da74f118dfb3ef0dee0ffbbe89428271002260f8
 
 build:
-  number: 4
+  number: 5
   run_exports:
     - {{ pin_subpackage('minizip', max_pin='x') }}
 
@@ -32,8 +32,13 @@ requirements:
 
 test:
   commands:
-    - test -f $PREFIX/lib/libminizip${SHLIB_EXT}  # [not win]
-    - if not exist %LIBRARY_LIB%\\libminizip.lib exit 1  # [win]
+    # presence of shared libraries
+    - test -f $PREFIX/lib/libminizip${SHLIB_EXT}        # [unix]
+    - if not exist %LIBRARY_BIN%\libminizip.dll exit 1  # [win]
+    - if not exist %LIBRARY_LIB%\libminizip.lib exit 1  # [win]
+
+    # absence of static libraries
+    - test ! -f $PREFIX/lib/libminizip.a                # [unix]
 
 about:
   home: https://github.com/zlib-ng/minizip-ng

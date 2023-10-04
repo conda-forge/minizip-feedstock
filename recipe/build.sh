@@ -1,8 +1,11 @@
+#!/bin/bash
+set -ex
 
+mkdir build
+cd build
 
-cmake ${CMAKE_ARGS} -S . -B build \
+cmake ${CMAKE_ARGS} \
   -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
-  -DCMAKE_INSTALL_LIBDIR="$PREFIX/lib" \
   -DBUILD_SHARED_LIBS=ON \
   -DCMAKE_BUILD_TYPE=Release \
   -DMZ_BUILD_TESTS=ON \
@@ -10,12 +13,15 @@ cmake ${CMAKE_ARGS} -S . -B build \
   -DMZ_LIBCOMP=OFF \
   -DMZ_OPENSSL=ON \
   -DMZ_ZLIB=ON \
-  -DMZ_FORCE_FETCH_LIBS=OFF
+  -DMZ_FORCE_FETCH_LIBS=OFF \
+  ..
 
-cmake --build build
+cmake --build .
 
 if [[ "${CONDA_BUILD_CROSS_COMPILATION:-}" != "1" || "${CROSSCOMPILING_EMULATOR}" != "" ]]; then
-ctest --output-on-failure -C Release
+ctest --output-on-failure
 fi
 
-cmake --install build
+cmake --install .
+
+cd ..
