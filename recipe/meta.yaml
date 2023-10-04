@@ -12,9 +12,13 @@ source:
   git_rev: 8658af7e0a73d6ac4d94e81dde0e9fa95b1aff47
   patches:
     - patches/0001-set-separate-suffix-for-static-builds-on-windows.patch
+    # undo an upstream commit that switches too aggressively to
+    # arc4random_buf, which is not available on linux, see:
+    # https://github.com/zlib-ng/minizip-ng/commit/dac37702b3fab4068ac9a7c4a992df7f0e4f14df
+    - patches/0002-Revert-Use-arc4random_buf.-Issue-175.patch
 
 build:
-  number: 1
+  number: 2
 
 outputs:
   - name: minizip
