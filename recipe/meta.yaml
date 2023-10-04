@@ -32,8 +32,11 @@ requirements:
 
 test:
   commands:
-    - test -f $PREFIX/lib/libminizip${SHLIB_EXT}  # [not win]
-    - if not exist %LIBRARY_LIB%\\libminizip.lib exit 1  # [win]
+    # presence of shared libraries
+    - test -f $PREFIX/lib/libminizip${SHLIB_EXT}        # [unix]
+    - if not exist %LIBRARY_BIN%\libminizip.dll exit 1  # [win]
+    - if not exist %LIBRARY_LIB%\libminizip.lib exit 1  # [win]
+
 
 about:
   home: https://github.com/zlib-ng/minizip-ng
