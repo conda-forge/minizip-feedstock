@@ -14,7 +14,7 @@ source:
     - patches/0001-set-separate-suffix-for-static-builds-on-windows.patch
 
 build:
-  number: 0
+  number: 1
 
 outputs:
   - name: minizip
