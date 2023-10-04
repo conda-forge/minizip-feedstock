@@ -10,6 +10,8 @@ source:
   # for reproducibility, we point to a specific commit
   git_url: https://github.com/zlib-ng/minizip-ng.git
   git_rev: 8658af7e0a73d6ac4d94e81dde0e9fa95b1aff47
+  patches:
+    - patches/0001-set-separate-suffix-for-static-builds-on-windows.patch
 
 build:
   number: 0

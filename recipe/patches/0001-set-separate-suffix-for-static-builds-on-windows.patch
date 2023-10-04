@@ -1,0 +1,23 @@
+From eed16c969d6549fa8217071d0d6f9f8d96579fe3 Mon Sep 17 00:00:00 2001
+From: "H. Vetinari" <h.vetinari@gmx.com>
+Date: Wed, 4 Oct 2023 12:09:44 +1100
+Subject: [PATCH] set separate suffix for static builds on windows
+
+---
+ CMakeLists.txt | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index bcf4926..a20b3f9 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -59,6 +59,9 @@ endif()
+ 
+ # create minizip library
+ add_library(minizip ${MINIZIP_SRC} ${MINIZIP_PUBLIC_HEADERS})
++if(WIN32 AND (NOT BUILD_SHARED_LIBS))
++  set_target_properties(minizip PROPERTIES SUFFIX "_static.lib")
++endif()
+ target_link_libraries(minizip ZLIB::ZLIB)
+ 
+ option(USE_AES "enables building of aes library" ON)
