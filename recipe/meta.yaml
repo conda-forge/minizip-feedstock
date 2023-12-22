@@ -10,7 +10,7 @@ source:
   sha256: e96ed3866706a67dbed05bf035e26ef6b60f408e1381bf0fe9af17fe2c0abebc
 
 build:
-  number: 0
+  number: 1
   run_exports:
     - {{ pin_subpackage('minizip', max_pin='x') }}
 
