@@ -1,5 +1,5 @@
 {% set name = "minizip" %}
-{% set version = "4.0.3" %}
+{% set version = "4.0.4" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/zlib-ng/minizip-ng/archive/{{ version }}/{{ name }}-{{ version }}.tar.gz
-  sha256: e39a736d4f55c22fa548e68225b2e92bc22aedd9ab90d002b0c5851e3a7bdace
+  sha256: 955800fe39f9d830fcb84e60746952f6a48e41093ec7a233c63ad611b5fcfe9f
 
 build:
   number: 0
