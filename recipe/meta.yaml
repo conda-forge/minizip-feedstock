@@ -1,5 +1,5 @@
 {% set name = "minizip" %}
-{% set version = "4.0.6" %}
+{% set version = "4.0.7" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/zlib-ng/minizip-ng/archive/{{ version }}/{{ name }}-{{ version }}.tar.gz
-  sha256: e96ed3866706a67dbed05bf035e26ef6b60f408e1381bf0fe9af17fe2c0abebc
+  sha256: a87f1f734f97095fe1ef0018217c149d53d0f78438bcb77af38adc21dff2dfbc
 
 build:
   number: 0
@@ -35,8 +35,8 @@ test:
   commands:
     # presence of shared libraries
     - test -f $PREFIX/lib/libminizip${SHLIB_EXT}        # [unix]
-    - if not exist %LIBRARY_BIN%\libminizip.dll exit 1  # [win]
-    - if not exist %LIBRARY_LIB%\libminizip.lib exit 1  # [win]
+    - if not exist %LIBRARY_BIN%\minizip.dll exit 1  # [win]
+    - if not exist %LIBRARY_LIB%\minizip.lib exit 1  # [win]
 
     # absence of static libraries
     - test ! -f $PREFIX/lib/libminizip.a                # [unix]
