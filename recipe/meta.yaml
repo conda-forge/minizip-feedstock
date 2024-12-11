@@ -10,7 +10,7 @@ source:
   sha256: a87f1f734f97095fe1ef0018217c149d53d0f78438bcb77af38adc21dff2dfbc
 
 build:
-  number: 0
+  number: 1
   run_exports:
     - {{ pin_subpackage('minizip', max_pin='x') }}
 
@@ -27,7 +27,7 @@ requirements:
     - bzip2
     - libiconv  # [not win]
     - openssl  # [not win]
-    - xz
+    - liblzma-devel
     - zlib
     - zstd
 
