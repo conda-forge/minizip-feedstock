@@ -10,6 +10,7 @@ source:
   sha256: 85417229bb0cd56403e811c316150eea1a3643346d9cec7512ddb7ea291b06f2
   patches:
     - win_patch_output_name.patch  # [win]
+    - gh946_fetch.patch
 
 build:
   number: 0

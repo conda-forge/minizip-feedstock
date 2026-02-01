@@ -1,0 +1,37 @@
+From 942e99c217f1489aa8af950e46f99db14d346301 Mon Sep 17 00:00:00 2001
+From: pmqs <pmqs@cpan.org>
+Date: Wed, 28 Jan 2026 17:01:31 +0000
+Subject: [PATCH] Replace deprecated FetchContent_GetProperties with
+ FetchContent_MakeAvailable
+
+---
+ cmake/clone-repo.cmake | 2 +-
+ test/CMakeLists.txt    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/cmake/clone-repo.cmake b/cmake/clone-repo.cmake
+index 7326121a..ac572d23 100644
+--- a/cmake/clone-repo.cmake
++++ b/cmake/clone-repo.cmake
+@@ -23,7 +23,7 @@ macro(clone_repo name url tag)
+             GIT_TAG ${${name_upper}_TAG}
+             SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/third_party/${name_lower})
+ 
+-        FetchContent_GetProperties(${name} POPULATED ${name_lower}_POPULATED)
++        FetchContent_MakeAvailable(${name})
+ 
+         if(NOT ${name_lower}_POPULATED)
+             FetchContent_Populate(${name})
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index f5424dbf..422e242f 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -35,7 +35,7 @@ if(NOT TARGET GTest::GTest)
+         GIT_REPOSITORY ${GTEST_REPOSITORY}
+         GIT_TAG ${GTEST_TAG})
+ 
+-    FetchContent_GetProperties(googletest)
++    FetchContent_MakeAvailable(googletest)
+     if(NOT googletest_POPULATED)
+         FetchContent_Populate(googletest)
+         add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR} EXCLUDE_FROM_ALL)
