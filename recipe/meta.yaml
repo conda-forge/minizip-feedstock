@@ -10,9 +10,12 @@ source:
   sha256: 71af7b9799856d8b03619df3949e9c1be9703f8de0795af71399ba283cb27aac
   patches:
     - win_patch_output_name.patch  # [win]
+    - gtest_shared_main.patch  # [win]
 
 build:
-  number: 0
+  number: 1
+  ignore_run_exports_from:
+    - gtest
   run_exports:
     - {{ pin_subpackage('minizip', max_pin='x') }}
 
@@ -20,13 +23,14 @@ requirements:
   build:
     - {{ compiler('c') }}
     - {{ stdlib("c") }}
-    - {{ compiler('cxx') }}  # [not win]
+    - {{ compiler('cxx') }}
     - cmake
     - make  # [not win]
     - ninja  # [win]
-    - pkg-config
+    - pkg-config  # [not win]
   host:
     - bzip2
+    - gtest  # [win]
     - libiconv  # [not win]
     - openssl  # [not win]
     - liblzma-devel
@@ -34,11 +38,27 @@ requirements:
     - zstd
 
 test:
+  requires:
+    - {{ compiler('c') }}  # [target_platform == "win-arm64"]
+    - cmake  # [target_platform == "win-arm64"]
+    - zlib  # [target_platform == "win-arm64"]
+  files:
+    - CMakeLists.txt  # [target_platform == "win-arm64"]
+    - test_minizip.c  # [target_platform == "win-arm64"]
   commands:
     # presence of shared libraries
     - test -f $PREFIX/lib/libminizip${SHLIB_EXT}        # [unix]
     - if not exist %LIBRARY_BIN%\libminizip.dll exit 1  # [win]
     - if not exist %LIBRARY_LIB%\libminizip.lib exit 1  # [win]
+
+    # Compile and run against the installed CMake package.
+    - cmake -S . -B test-build -G "NMake Makefiles"  # [target_platform == "win-arm64"]
+    - cmake --build test-build --config Release  # [target_platform == "win-arm64"]
+    - test-build\minizip_consumer.exe  # [target_platform == "win-arm64"]
+
+    # Prove the consumer and installed DLL are native ARM64 binaries.
+    - dumpbin /headers test-build\minizip_consumer.exe | findstr /c:"AA64"  # [target_platform == "win-arm64"]
+    - dumpbin /headers %LIBRARY_BIN%\libminizip.dll | findstr /c:"AA64"  # [target_platform == "win-arm64"]
 
     # absence of static libraries
     - test ! -f $PREFIX/lib/libminizip.a                # [unix]
