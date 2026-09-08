@@ -13,7 +13,6 @@ Development: https://github.com/zlib-ng/minizip-ng
 
 minizip-ng is a zip manipulation library written in C
 
-
 Current build status
 ====================
 
