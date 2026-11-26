@@ -18,7 +18,7 @@ source:
       then: gtest_shared_main.patch
 
 build:
-  number: 1
+  number: 2
 
 requirements:
   build:
